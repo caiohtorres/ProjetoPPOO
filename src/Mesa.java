@@ -5,13 +5,13 @@ public abstract class Mesa {
     private int id;
     private boolean disponibilidade;
     protected double taxa;
-    private Localizacao localizacaoAtual;
+    private Localizacao localizacaoMesa;
 
-    public Mesa(int id, double taxa, Localizacao localizacaoAtual) {
+    public Mesa(int id, double taxa, Localizacao localizacao) {
         this.id = id;
         this.taxa = taxa;
-        this.disponibilidade = true;
-        this.localizacaoAtual = localizacaoAtual;
+        this.disponibilidade = true; // Por padrão, mesa está disponível
+        this.localizacaoMesa = localizacao;
     }
 
     public int getId() {
@@ -26,12 +26,12 @@ public abstract class Mesa {
         this.disponibilidade = disponibilidade;
     }
 
-    public Localizacao getLocalizacaoAtual() {
-        return localizacaoAtual;
+    public Localizacao getLocalizacaoMesa() {
+        return localizacaoMesa;
     }
 
-    public void setLocalizacaoAtual(Localizacao novaLocalizacao) {
-        this.localizacaoAtual = novaLocalizacao;
+    public void setLocalizacaoMesa(Localizacao novaLocalizacao) {
+        this.localizacaoMesa = novaLocalizacao;
     }
 
     public abstract double calcularTaxa();

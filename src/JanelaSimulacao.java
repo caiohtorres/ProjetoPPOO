@@ -14,7 +14,7 @@ public class JanelaSimulacao extends JFrame{
         visaoMapa = new VisaoMapa(mapa.getLargura(),mapa.getAltura());
         getContentPane().add(visaoMapa);
         setTitle("Simulator");
-        setSize(1000,1000);
+        setSize(500,500);
         setVisible(true);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
     }
@@ -27,9 +27,9 @@ public class JanelaSimulacao extends JFrame{
         for(int i = 0; i < mapa.getAltura(); i++){
             for(int j = 0; j < mapa.getLargura(); j++){
                 if(mapa.getItem(i, j) != null){//Se existir algum objeto na posicao (i,j)
-                    Mesa veiculo = mapa.getItem(i, j);
-                    Localizacao localizacao = veiculo.getLocalizacaoAtual();
-                    visaoMapa.desenharImagem(localizacao.getX(), localizacao.getY(), veiculo.getImagem());
+                    Mesa mesa = mapa.getItem(i, j);
+                    Localizacao localizacao = mesa.getLocalizacaoMesa();
+                    visaoMapa.desenharImagem(localizacao.getX(), localizacao.getY(), mesa.getImagem());
                 }
             }
         }

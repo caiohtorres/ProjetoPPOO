@@ -7,8 +7,8 @@ public class Mapa {
     private int largura;
     private int altura;
     
-    private static final int LARGURA_PADRAO = 35;
-    private static final int ALTURA_PADRAO = 35;
+    private static final int LARGURA_PADRAO = 20;
+    private static final int ALTURA_PADRAO = 20;
     
     /**
      * Cria mapa para alocar itens da simulacao.
@@ -28,11 +28,11 @@ public class Mapa {
     }
     
     public void adicionarItem(Mesa v){
-        itens[v.getLocalizacaoAtual().getX()][v.getLocalizacaoAtual().getY()] = v;
+        itens[v.getLocalizacaoMesa().getX()][v.getLocalizacaoMesa().getY()] = v;
     }
     
     public void removerItem(Mesa v){
-        itens[v.getLocalizacaoAtual().getX()][v.getLocalizacaoAtual().getY()] = null;
+        itens[v.getLocalizacaoMesa().getX()][v.getLocalizacaoMesa().getY()] = null;
     }
     
     public void atualizarMapa(Mesa v){
