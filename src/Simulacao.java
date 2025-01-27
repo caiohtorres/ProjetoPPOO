@@ -1,8 +1,4 @@
 import java.util.Random;
-/**
- * Responsavel pela simulacao.
- * @author David J. Barnes and Michael Kolling and Luiz Merschmann
- */
 
 public class Simulacao {
     private Mapa mapa;
@@ -14,32 +10,50 @@ public class Simulacao {
         int largura = mapa.getLargura();
         int altura = mapa.getAltura();
 
-        int id = 1;
+        int id = 0;
 
-        if (largura <= 0 || altura <= 0) {
-            throw new IllegalArgumentException("O mapa deve ter largura e altura maiores que zero.");
-        }
+        // Adicionar mesas VIP (2 mesas)
+        adicionarMesasVIP(id, 0, 0);  // Colocando na primeira linha
+        id += 2;
 
-        // Adiciona 10 mesas Econômicas
-        for (int i = 0; i < 10; i++) {
-            MesaEconomica mesaEconomica = new MesaEconomica(id++, 50.0, 10,  new Localizacao(rand.nextInt(largura), rand.nextInt(altura)));
-            mapa.adicionarItem(mesaEconomica);
-        }
+        // Adicionar mesas Família (3 mesas)
+        adicionarMesasFamilia(id, 0, 4); // Colocando nas 4 próximas posições
+        id += 3;
 
-        // Adiciona 5 mesas Família
-        for (int i = 0; i < 5; i++) {
-            MesaFamilia mesaFamilia = new MesaFamilia(
-            id++, 70.0, new Localizacao(rand.nextInt(largura), rand.nextInt(altura)));
-            mapa.adicionarItem(mesaFamilia);
-        }
-
-        // Adiciona 3 mesas VIP
-        for (int i = 0; i < 3; i++) {
-            MesaVIP mesaVIP = new MesaVIP(id++, 100.0,50.0,new Localizacao(rand.nextInt(largura), rand.nextInt(altura)));
-            mapa.adicionarItem(mesaVIP);
-        }
+        // Adicionar mesas Econômicas (5 mesas)
+        adicionarMesasEconomicas(id, 2, 0); // Colocando nas linhas abaixo
+        id += 5;
 
         janelaSimulacao = new JanelaSimulacao(mapa);
+    }
+
+    // Método para adicionar mesas VIP na primeira linha
+    private void adicionarMesasVIP(int id, int linha, int colunaInicial) {
+        for (int i = 0; i <= 1; i++) {
+            Localizacao localizacao = new Localizacao(colunaInicial + i * 2, linha); // Adiciona 2 blocos de distância
+            MesaVIP mesaVIP = new MesaVIP(id++, 100.0, 50.0, localizacao);
+            mapa.adicionarItem(mesaVIP);
+        }
+    }
+
+    // Método para adicionar mesas Família na primeira linha
+    private void adicionarMesasFamilia(int id, int linha, int colunaInicial) {
+        for (int i = 0; i <= 2; i++) {
+            Localizacao localizacao = new Localizacao(colunaInicial + i * 2, linha); // Adiciona 2 blocos de distância
+            MesaFamilia mesaFamilia = new MesaFamilia(id++, 70.0, localizacao);
+            mapa.adicionarItem(mesaFamilia);
+        }
+    }
+
+    // Método para adicionar mesas Econômicas na linha abaixo
+    private void adicionarMesasEconomicas(int id, int linhaInicial, int colunaInicial) {
+        for (int i = 0; i <= 4; i++) {
+            int linha = linhaInicial + i / 5; // 5 mesas por linha
+            int coluna = colunaInicial + (i % 5) * 2; // Mesas espaçadas 2 blocos
+            Localizacao localizacao = new Localizacao(coluna, linha);
+            MesaEconomica mesaEconomica = new MesaEconomica(id++, 50.0, 10, localizacao);
+            mapa.adicionarItem(mesaEconomica);
+        }
     }
 
     public void executarSimulacao(int numPassos) {

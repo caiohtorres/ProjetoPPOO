@@ -33,7 +33,6 @@ public class MesaFamilia extends Mesa {
 
     @Override
     public Image getImagem() {
-        ImageIcon icon = new ImageIcon("./imagens/mesafamilia.png");
-        return icon.getImage().getScaledInstance(1004, 1004, Image.SCALE_SMOOTH); // Ajuste o tamanho conforme necessário
+        return new ImageIcon("./imagens/mesafamilia.png").getImage();
     }
 }

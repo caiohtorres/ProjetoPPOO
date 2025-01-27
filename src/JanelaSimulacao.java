@@ -14,7 +14,7 @@ public class JanelaSimulacao extends JFrame{
         visaoMapa = new VisaoMapa(mapa.getLargura(),mapa.getAltura());
         getContentPane().add(visaoMapa);
         setTitle("Simulator");
-        setSize(500,500);
+        setSize(1000,1000);
         setVisible(true);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
     }
