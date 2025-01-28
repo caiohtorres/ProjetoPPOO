@@ -28,11 +28,16 @@ public class MesaFamilia extends Mesa {
 
     @Override
     public double calcularTaxa() {
-        return taxa + taxaBrinquedos;
+        return super.getTaxa() + taxaBrinquedos;
     }
 
     @Override
     public Image getImagem() {
         return new ImageIcon("./imagens/mesafamilia.png").getImage();
+    }
+
+    @Override
+    public String getNomeMesa() {
+        return super.getNomeMesa();
     }
 }

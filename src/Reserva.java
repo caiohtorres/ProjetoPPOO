@@ -1,18 +1,30 @@
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Random;
 
 public class Reserva {
     private Cliente cliente;
     private Mesa mesa;
     private int tempoReserva;
     private double valorTotal;
-    private ArrayList<Pedido> pedidos;
+    private ArrayList<Pedido> pedidoEscolhido;
+
+    private static final ArrayList<Pedido> pedidosDisponiveis = new ArrayList<>(
+        Arrays.asList(new Pedido(1, "Carne", 100), new Pedido(2, "Salada", 200), new Pedido(3, "Rodízio", 1000), new Pedido(4, "Vegan", 50)));
 
     public Reserva(Cliente cliente, Mesa mesa, int tempoReserva) {
         this.cliente = cliente;
         this.mesa = mesa;
         this.tempoReserva = tempoReserva;
         this.valorTotal = mesa.calcularTaxa();
-        pedidos = new ArrayList<>();
+        pedidoEscolhido = new ArrayList<>();
+        Random random = new Random();
+
+        // Seleciona 2 pedidos aleatórios
+        for (int i = 0; i < 2; i++) {
+            Pedido pedidoAleatorio = pedidosDisponiveis.get(random.nextInt(pedidosDisponiveis.size()));
+            pedidoEscolhido.add(pedidoAleatorio);
+        }
     }
 
     public Cliente getCliente() {
@@ -27,11 +39,18 @@ public class Reserva {
         return tempoReserva;
     }
 
+    public void setTempoReserva() {
+        this.tempoReserva = tempoReserva-1;
+    }
+
     public double getValorTotal() {
+        for (Pedido pedido : pedidoEscolhido)
+            valorTotal += pedido.getValorTotal();
         return valorTotal;
     }
 
     public void confirmarReserva() {
+        if  (mesa instanceof Mesa)
         mesa.setDisponibilidade(false);
         System.out.println("Reserva confirmada para o cliente " + cliente.getNome());
     }

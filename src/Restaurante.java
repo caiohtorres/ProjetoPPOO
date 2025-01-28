@@ -1,22 +1,33 @@
+import java.awt.Image;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Queue;
+
+import javax.swing.ImageIcon;
 
 public class Restaurante {
     private ArrayList<Mesa> listaMesas;
     private String restauranteNome;
     private double caixaTotal;
     private Queue<ClienteEspera> filaEspera;
+    private Image imagem;
+    private Localizacao localizacao;
 
-    public Restaurante(String restauranteNome) {
+    public Restaurante(String restauranteNome, Localizacao localizacao) {
         this.restauranteNome = restauranteNome;
         this.listaMesas = new ArrayList<>();
         this.caixaTotal = 0.0;
         this.filaEspera = new LinkedList<>();
+        imagem = new ImageIcon(getClass().getResource("Imagens/parede.png")).getImage();
+        this.localizacao = localizacao;
     }
 
     public ArrayList<Mesa> getMesas() {
         return listaMesas;
+    }
+
+    public Localizacao getLocalizacao() {
+        return localizacao;
     }
 
     public double getCaixaTotal() {
@@ -24,7 +35,7 @@ public class Restaurante {
     }
 
     public void setCaixaTotal(double valor) {
-        this.caixaTotal = valor;
+        this.caixaTotal += valor;
     }
 
     public void adicionarPagamento(double valor) {
@@ -45,5 +56,13 @@ public class Restaurante {
 
     public String getRestauranteNome() {
         return restauranteNome;
+    }
+
+    public Image getImagem() {
+        return imagem;
+    }
+
+    public void adicionarMesa(Mesa m) {
+        listaMesas.add(m);
     }
 }

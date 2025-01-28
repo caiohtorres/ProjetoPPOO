@@ -1,6 +1,5 @@
 import java.awt.Image;
 
-
 public abstract class Mesa {
     private int id;
     private boolean disponibilidade;
@@ -32,6 +31,14 @@ public abstract class Mesa {
 
     public void setLocalizacaoMesa(Localizacao novaLocalizacao) {
         this.localizacaoMesa = novaLocalizacao;
+    }
+
+    public String getNomeMesa() {
+        return "";
+    }
+
+    public double getTaxa(){
+        return taxa;
     }
 
     public abstract double calcularTaxa();

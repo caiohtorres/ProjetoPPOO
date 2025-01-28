@@ -9,17 +9,23 @@ public class MesaEconomica extends Mesa {
         this.desconto = desconto;
     }
 
-    public int getDesconto(){
+    public int getDesconto() {
         return desconto;
     }
 
     @Override
     public double calcularTaxa() {
-        return taxa - desconto;
+        return super.getTaxa() - desconto;
     }
 
     @Override
     public Image getImagem() {
         return new ImageIcon("./imagens/mesaeconomica.png").getImage();
     }
+
+    @Override
+    public String getNomeMesa() {
+        return super.getNomeMesa();
+    }
+
 }
