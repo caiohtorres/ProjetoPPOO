@@ -1,3 +1,5 @@
+
+
 /**
  * Representa um mapa com todos os itens que participam da simulacao
  * 
@@ -74,5 +76,7 @@ public class Mapa {
     public Restaurante getRestaurante(int x, int y) {
         return restaurantes[x][y];
     }
+
+
 
 }

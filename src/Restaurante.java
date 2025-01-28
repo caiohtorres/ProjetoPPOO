@@ -1,15 +1,14 @@
 import java.awt.Image;
 import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.Queue;
-
+import java.util.Random;
 import javax.swing.ImageIcon;
 
 public class Restaurante {
     private ArrayList<Mesa> listaMesas;
     private String restauranteNome;
     private double caixaTotal;
-    private Queue<ClienteEspera> filaEspera;
+    private ArrayList<ClienteEspera> filaEspera;
+    private ArrayList<Cliente> filaAtendidos;
     private Image imagem;
     private Localizacao localizacao;
 
@@ -17,7 +16,8 @@ public class Restaurante {
         this.restauranteNome = restauranteNome;
         this.listaMesas = new ArrayList<>();
         this.caixaTotal = 0.0;
-        this.filaEspera = new LinkedList<>();
+        this.filaEspera = new ArrayList<>();
+        this.filaAtendidos = new ArrayList<>();
         imagem = new ImageIcon(getClass().getResource("Imagens/parede.png")).getImage();
         this.localizacao = localizacao;
     }
@@ -42,16 +42,33 @@ public class Restaurante {
         this.caixaTotal += valor;
     }
 
-    public void adicionarNaFila(ClienteEspera cliente) {
+    public void adicionarNaFilaEspera(ClienteEspera cliente) {
         filaEspera.add(cliente);
     }
 
-    public void retirarDaFila(ClienteEspera cliente) {
-        filaEspera.remove(cliente);
+    public Cliente retirarDaFilaEspera(ClienteEspera cliente) {
+        Cliente clienteRetirado = cliente.getRepresentante();
+        filaAtendidos.remove(clienteRetirado);
+        return clienteRetirado;
+    }
+    
+
+    public void adicionarNaFilaAtendidos(Cliente cliente) {
+        filaAtendidos.add(cliente);
     }
 
-    public Queue<ClienteEspera> getFilaEspera() {
+    public Cliente retirarDaFilaAtendidos(Cliente cliente) {
+        Cliente clienteRetirado = cliente;
+        filaAtendidos.remove(cliente);
+        return clienteRetirado;
+    }
+
+    public ArrayList<ClienteEspera> getFilaEspera() {
         return filaEspera;
+    }
+
+    public ArrayList<Cliente> getFilaAtendidos(){
+        return filaAtendidos;
     }
 
     public String getRestauranteNome() {
@@ -65,4 +82,13 @@ public class Restaurante {
     public void adicionarMesa(Mesa m) {
         listaMesas.add(m);
     }
+
+    public Mesa getMesaAleatoria(){
+        ArrayList<Mesa> mesas = getMesas();
+        Random random = new Random();
+        int indiceAleatorio = random.nextInt(mesas.size());
+
+        return mesas.get(indiceAleatorio);
+    }
+
 }

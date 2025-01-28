@@ -20,4 +20,8 @@ public class Pedido {
     public double getValorTotal() {
         return valorTotal;
     }
+
+    public String getPedido() {
+        return "| Pedido: " + getNome() + " | Valor: " + getValorTotal() + "\n";
+    }
 }

@@ -1,6 +1,7 @@
-import java.util.Random;
 import java.util.ArrayList;
-import java.util.Queue;
+import java.util.Iterator;
+import java.util.Random;
+
 
 public class Simulacao {
     private Mapa mapa;
@@ -91,6 +92,27 @@ public class Simulacao {
         return null;
     }
 
+    public void fazerReserva(ClienteEspera clienteEspera, Mesa mesaDesejada){
+        Random rand = new Random();
+        int tempoReserva = rand.nextInt(50, 100);
+        Cliente cliente = restaurante.retirarDaFilaEspera(clienteEspera);
+        Reserva reserva = new Reserva(cliente, mesaDesejada, tempoReserva);
+        cliente.setReserva(reserva);
+        reserva.confirmarReserva(mesaDesejada);
+        mapa.adicionarCliente(cliente);
+        restaurante.adicionarNaFilaAtendidos(cliente);
+        restaurante.setCaixaTotal(reserva.getValorTotal());
+        System.out.printf(
+            "| Cliente: %s | Mesa: %d \n| Pedidos:\n%s \n| Tempo de Reserva: %d minutos%n",
+            cliente.getNome(),
+            mesaDesejada.getId(),
+            reserva.getPedidos(),
+            reserva.getTempoReserva()
+        );
+        System.out.println("Mesa disponível!");
+        System.out.println(mesaDesejada.getId());
+    }
+
     public void gerarCliente() {
         Random rand = new Random();
         int probabilidade = rand.nextInt(100);
@@ -105,27 +127,17 @@ public class Simulacao {
                 }
             }
 
-            Mesa mesaDisponivel = verificarMesas();
-            if (mesaDisponivel == null) {
-                System.out.println("Nenhuma mesa disponível para o cliente.");
-                Cliente cliente = new Cliente("Cliente Fulano", null, localizacao);
-                mapa.adicionarCliente(cliente);
-                ClienteEspera clienteEspera = new ClienteEspera(cliente, null);
+            Mesa mesaDesejada = restaurante.getMesaAleatoria();
+            Cliente novoCliente = new Cliente("Cliente Fulano", mesaDesejada, localizacao);
+            ClienteEspera clienteEspera = new ClienteEspera(novoCliente, mesaDesejada);
+            restaurante.adicionarNaFilaEspera(clienteEspera);
 
-                return;
-            }
-
-            int tempoReserva = rand.nextInt(300, 400);
-            Cliente cliente = new Cliente("Cliente Fulano", mesaDisponivel, localizacao);
-            Reserva reserva = new Reserva(cliente, mesaDisponivel, tempoReserva);
-            cliente.setReserva(reserva);
-            mesaDisponivel.setDisponibilidade(false);
-
-            mapa.adicionarCliente(cliente);
-
-            ClienteEspera clienteEspera = new ClienteEspera(cliente, mesaDisponivel);
-            restaurante.adicionarNaFila(clienteEspera);
-            restaurante.setCaixaTotal(reserva.getValorTotal());
+            if (!mesaDesejada.isDisponivel()) {
+                System.out.println("Mesa não disponível para o cliente.");
+                mapa.adicionarCliente(novoCliente);
+            }else{
+                fazerReserva(clienteEspera, mesaDesejada);
+            }                    
         }
     }
 
@@ -148,7 +160,7 @@ public class Simulacao {
         for (int i = 0; i < numPassos; i++) {
             executarUmPasso();
             gerarCliente();
-            esperar(1000);
+            esperar(500);
 
         }
         System.out.println("Valor total do caixa do restaurante: " + restaurante.getCaixaTotal());
@@ -156,20 +168,32 @@ public class Simulacao {
 
     private void executarUmPasso() {
         janelaSimulacao.executarAcao();
-        Queue<ClienteEspera> filaEspera = restaurante.getFilaEspera();
+        ArrayList<ClienteEspera> filaEspera = restaurante.getFilaEspera();
+        ArrayList<Cliente> filaAtendidos = restaurante.getFilaAtendidos();
         if (!filaEspera.isEmpty()) {
-            for (ClienteEspera clienteEspera : filaEspera) {
-                Cliente cliente = clienteEspera.getRepresentante();
+            Iterator<ClienteEspera> it = filaEspera.iterator();
+            while(it.hasNext()){
+                ClienteEspera clienteEspera = it.next();
                 Mesa mesa = clienteEspera.getTipoMesa();
-                if (!mesa.isDisponivel()) {
-                    definirDestinoCliente(cliente, mesa);
-                    mesa.setDisponibilidade(false);
+                if (mesa.isDisponivel()) {
+                    fazerReserva(clienteEspera, mesa);
+                    it.remove();
                 }
-                simularPasso();
-                cliente.atualizarLocalizacao();
-                cliente.executarAcao();
             }
         }
+        if (!filaAtendidos.isEmpty()) {
+            for (Cliente clienteAtendido : filaAtendidos) {
+                Mesa mesa = clienteAtendido.getTipoMesa();
+                if (!mesa.isDisponivel() && clienteAtendido.getReserva() != null) {
+                    definirDestinoCliente(clienteAtendido, mesa);
+                    mesa.setDisponibilidade(false);
+                }
+                clienteAtendido.atualizarLocalizacao();
+                clienteAtendido.executarAcao();
+            }
+        } 
+        simularPasso();
+        
     }
 
     private void definirDestinoCliente(Cliente cliente, Mesa mesa) {
@@ -179,9 +203,9 @@ public class Simulacao {
     }
 
     public void simularPasso() {
-        Queue<ClienteEspera> clientes = restaurante.getFilaEspera();
-        for (ClienteEspera clienteEspera : clientes) {
-            Cliente cliente = clienteEspera.getRepresentante();
+        ArrayList<Cliente> clientes = restaurante.getFilaAtendidos();
+
+        for (Cliente cliente : clientes) {
             if (cliente != null && cliente.getReserva() != null) {
                 processarReserva(cliente);
             }

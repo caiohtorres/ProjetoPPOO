@@ -1,6 +1,6 @@
 import java.awt.Image;
-import javax.swing.ImageIcon;
 import java.util.Random;
+import javax.swing.ImageIcon;
 
 public class Cliente {
     private static int idClientes = 0;
@@ -94,10 +94,14 @@ public class Cliente {
     }
 
     public void realizarPedido() {
-        System.out.println(nome + " realizou um pedido.");
+        System.out.println(nome + " realizou o pedido: " + reserva.toString());
     }
 
     public void sairRestaurante() {
         System.out.println(nome + " saiu do restaurante.");
+    }
+
+    public Mesa getTipoMesa() {
+        return tipoMesaPreferida;
     }
 }

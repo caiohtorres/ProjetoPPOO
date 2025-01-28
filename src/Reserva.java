@@ -40,7 +40,7 @@ public class Reserva {
     }
 
     public void setTempoReserva() {
-        this.tempoReserva = tempoReserva-1;
+        this.tempoReserva = tempoReserva - 1;
     }
 
     public double getValorTotal() {
@@ -49,9 +49,16 @@ public class Reserva {
         return valorTotal;
     }
 
-    public void confirmarReserva() {
-        if  (mesa instanceof Mesa)
-        mesa.setDisponibilidade(false);
+    public void confirmarReserva(Mesa m) {
+        m.setDisponibilidade(false);
         System.out.println("Reserva confirmada para o cliente " + cliente.getNome());
+    }
+
+    public String getPedidos() {
+        StringBuilder conta = new StringBuilder();
+        for (Pedido pedido : pedidoEscolhido) {
+            conta.append(pedido.getPedido()).append(" | ");
+        }
+        return conta.toString();
     }
 }
