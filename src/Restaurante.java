@@ -45,6 +45,8 @@ public class Restaurante {
     public void adicionarNaFilaEspera(ClienteEspera cliente) {
         filaEspera.add(cliente);
     }
+    
+
 
     public Cliente retirarDaFilaEspera(ClienteEspera cliente) {
         Cliente clienteRetirado = cliente.getRepresentante();

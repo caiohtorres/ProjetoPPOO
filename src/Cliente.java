@@ -6,29 +6,33 @@ public class Cliente {
     private static int idClientes = 0;
     private int id;
     private String nome;
-    private Mesa tipoMesaPreferida;
+    private String tipoMesaPreferida;
     private Localizacao localizacaoAtual;
     private Localizacao localizacaoDestino;
     private Image imagem;
     private Reserva reserva;
 
-    public Cliente(String nome, Mesa tipoMesaPreferida, Localizacao localizacao) {
+    public Cliente(String nome, String tipoMesaPreferida, Localizacao localizacao) {
         this.id = idClientes;
         this.nome = nome;
         this.tipoMesaPreferida = tipoMesaPreferida;
         this.localizacaoAtual = localizacao;
         localizacaoDestino = null;
-        imagem = carregarImagemAleatoria();
+        imagem = carregarImagemAleatoria(tipoMesaPreferida);
         idClientes += 1;
     }
 
-    private Image carregarImagemAleatoria() {
+    private Image carregarImagemAleatoria(String tipoMesa) {
         // Lista de nomes de arquivos de imagem
         String[] imagens = { "Imagens/cliente.png", "Imagens/cliente2.png", "Imagens/cliente3.png" };
-
-        // Gera um índice aleatório para selecionar uma imagem
-        Random random = new Random();
-        int indiceAleatorio = random.nextInt(imagens.length);
+        int indiceAleatorio = 0;
+        if (tipoMesa == "MesaVIP") {
+            indiceAleatorio = 0;
+        } else if (tipoMesa == "MesaEconomica") {
+            indiceAleatorio = 1;
+        } else if (tipoMesa == "MesaFamilia") {
+            indiceAleatorio = 2;
+        }
 
         // Retorna a imagem correspondente ao índice aleatório
         return new ImageIcon(getClass().getResource(imagens[indiceAleatorio])).getImage();
@@ -81,7 +85,7 @@ public class Cliente {
         return nome;
     }
 
-    public Mesa getTipoMesaPreferida() {
+    public String getTipoMesaPreferida() {
         return tipoMesaPreferida;
     }
 
@@ -101,7 +105,7 @@ public class Cliente {
         System.out.println(nome + " saiu do restaurante.");
     }
 
-    public Mesa getTipoMesa() {
+    public String getTipoMesa() {
         return tipoMesaPreferida;
     }
 }
