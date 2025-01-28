@@ -8,8 +8,8 @@ public class Simulacao {
     private JanelaSimulacao janelaSimulacao;
     private Restaurante restaurante;
 
-    private int coluna = 0;
-    private int linha = 5;
+    private int colunaFila = 0;
+    private int linhaFila = 5;
 
     public Simulacao() {
         Random rand = new Random(12345);
@@ -113,17 +113,23 @@ public class Simulacao {
         System.out.println(mesaDesejada.getId());
     }
 
+    public void atualizarFila(){
+        linhaFila --;
+
+        System.out.println("Posicao da fila" + linhaFila);
+    }
+
     public void gerarCliente() {
         Random rand = new Random();
         int probabilidade = rand.nextInt(100);
         if (probabilidade < 20) {
-            Localizacao localizacao = new Localizacao(coluna, linha);
-            linha += 1;
-            if (linha == 10) {
-                coluna += 1;
-                linha = 5;
-                if (coluna == 8) {
-                    linha = 5;
+            Localizacao localizacao = new Localizacao(colunaFila, linhaFila);
+            linhaFila += 1;
+            if (linhaFila == 10) {
+                colunaFila += 1;
+                linhaFila = 5;
+                if (colunaFila == 8) {
+                    linhaFila = 5;
                 }
             }
 
@@ -177,7 +183,7 @@ public class Simulacao {
                 Mesa mesa = clienteEspera.getTipoMesa();
                 if (mesa.isDisponivel()) {
                     fazerReserva(clienteEspera, mesa);
-                    it.remove();
+                    it.remove();    
                 }
             }
         }
