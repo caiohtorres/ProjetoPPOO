@@ -82,7 +82,7 @@ public class Simulacao {
         mesas = restaurante.getMesas();
 
         for (Mesa mesa : mesas) {
-            if (mesa.isDisponivel() == true ) {
+            if (mesa.isDisponivel() == true) {
                 System.out.println("Mesa disponível!");
                 System.out.println(mesa.getId());
                 return mesa;
@@ -97,14 +97,14 @@ public class Simulacao {
         if (probabilidade < 20) {
             Localizacao localizacao = new Localizacao(coluna, linha);
             linha += 1;
-            if(linha == 10){
-                coluna +=1;
-                linha =5;
-                if(coluna == 8){
+            if (linha == 10) {
+                coluna += 1;
+                linha = 5;
+                if (coluna == 8) {
                     linha = 5;
                 }
             }
-    
+
             Mesa mesaDisponivel = verificarMesas();
             if (mesaDisponivel == null) {
                 System.out.println("Nenhuma mesa disponível para o cliente.");
@@ -114,21 +114,20 @@ public class Simulacao {
 
                 return;
             }
-    
-            int tempoReserva = rand.nextInt(300,400);
+
+            int tempoReserva = rand.nextInt(300, 400);
             Cliente cliente = new Cliente("Cliente Fulano", mesaDisponivel, localizacao);
             Reserva reserva = new Reserva(cliente, mesaDisponivel, tempoReserva);
             cliente.setReserva(reserva);
             mesaDisponivel.setDisponibilidade(false);
-    
+
             mapa.adicionarCliente(cliente);
-    
+
             ClienteEspera clienteEspera = new ClienteEspera(cliente, mesaDisponivel);
             restaurante.adicionarNaFila(clienteEspera);
             restaurante.setCaixaTotal(reserva.getValorTotal());
         }
     }
-    
 
     // public void enviarProximoClienteParaMesa(int numeroMesa) {
     // if (!restaurante.getFilaEspera().isEmpty() && numeroMesa >= 0 && numeroMesa <
@@ -149,7 +148,7 @@ public class Simulacao {
         for (int i = 0; i < numPassos; i++) {
             executarUmPasso();
             gerarCliente();
-            esperar(500);
+            esperar(1000);
 
         }
         System.out.println("Valor total do caixa do restaurante: " + restaurante.getCaixaTotal());
@@ -202,11 +201,9 @@ public class Simulacao {
         System.out.println("Reserva finalizada! : " + cliente.getId());
         cliente.setReserva(null);
         reserva.getMesa().setDisponibilidade(true);
-        cliente.setLocalizacaoDestino(new Localizacao(20,20));
+        cliente.setLocalizacaoDestino(new Localizacao(20, 20));
     }
 
-
-    
     private void esperar(int milisegundos) {
         try {
             Thread.sleep(milisegundos);

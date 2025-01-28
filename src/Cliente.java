@@ -1,5 +1,6 @@
 import java.awt.Image;
 import javax.swing.ImageIcon;
+import java.util.Random;
 
 public class Cliente {
     private static int idClientes = 0;
@@ -17,11 +18,23 @@ public class Cliente {
         this.tipoMesaPreferida = tipoMesaPreferida;
         this.localizacaoAtual = localizacao;
         localizacaoDestino = null;
-        imagem = new ImageIcon(getClass().getResource("Imagens/cliente.png")).getImage();
+        imagem = carregarImagemAleatoria();
         idClientes += 1;
     }
 
-        public void atualizarLocalizacao() {
+    private Image carregarImagemAleatoria() {
+        // Lista de nomes de arquivos de imagem
+        String[] imagens = { "Imagens/cliente.png", "Imagens/cliente2.png", "Imagens/cliente3.png" };
+
+        // Gera um índice aleatório para selecionar uma imagem
+        Random random = new Random();
+        int indiceAleatorio = random.nextInt(imagens.length);
+
+        // Retorna a imagem correspondente ao índice aleatório
+        return new ImageIcon(getClass().getResource(imagens[indiceAleatorio])).getImage();
+    }
+
+    public void atualizarLocalizacao() {
         if (localizacaoDestino == null || localizacaoAtual.equals(localizacaoDestino)) {
             return;
         }
@@ -31,7 +44,6 @@ public class Cliente {
             localizacaoDestino = null;
         }
     }
-
 
     public Localizacao getLocalizacaoAtual() {
         return localizacaoAtual;
