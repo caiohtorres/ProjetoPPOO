@@ -2,6 +2,9 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Random;
 
+/**
+ * Classe responsável pela simulação de um restaurante com filas de espera e mesas disponíveis.
+ */
 public class Simulacao {
     private Mapa mapa;
     private JanelaSimulacao janelaSimulacao;
@@ -12,34 +15,36 @@ public class Simulacao {
     private int linhaFilaEco = 5;
     private int linhaFilaFamilia = 5;
 
+    /**
+     * Construtor que inicializa o mapa, restaurante e mesas.
+    */
     public Simulacao() {
-        Random rand = new Random(12345);
         mapa = new Mapa();
-        int largura = mapa.getLargura();
-        int altura = mapa.getAltura();
 
         int id = 0;
-        Integer idCliente = 0;
-        restaurante = new Restaurante("Restaurante do Léo", new Localizacao(10, 10));
+
+        restaurante = Restaurante.getInstance("Restaurante do Leo");
 
         // Adicionar mesas VIP (2 mesas)
         adicionarMesasVIP(id, 0, 0); 
-        id += 1;
+        id += 2;
 
         // Adicionar mesas Família (3 mesas)
         adicionarMesasFamilia(id, 0, 6);
-        id += 2;
+        id += 3;
 
         // Adicionar mesas Econômicas (5 mesas)
         adicionarMesasEconomicas(id, 2, 0);
-        id += 4;
 
         janelaSimulacao = new JanelaSimulacao(mapa);
-
-        adicionarParedes(restaurante, 4);
     }
 
-    // Método para adicionar mesas VIP na primeira linha
+    /**
+     * Adiciona mesas VIP ao restaurante.
+     * @param id Identificador das mesas
+     * @param linha Linha onde as mesas serão colocadas
+     * @param colunaInicial Coluna inicial das mesas
+     */
     private void adicionarMesasVIP(int id, int linha, int colunaInicial) {
         for (int i = 0; i <= 1; i++) {
             Localizacao localizacao = new Localizacao(colunaInicial + i * 3, linha); // Adiciona 2 blocos de distância
@@ -49,7 +54,12 @@ public class Simulacao {
         }
     }
 
-    // Método para adicionar mesas Família na primeira linha
+    /**
+     * Adiciona mesas familiares ao restaurante.
+     * @param id Identificador das mesas
+     * @param linha Linha onde as mesas serão colocadas
+     * @param colunaInicial Coluna inicial das mesas
+     */
     private void adicionarMesasFamilia(int id, int linha, int colunaInicial) {
         for (int i = 0; i <= 2; i++) {
             Localizacao localizacao = new Localizacao(colunaInicial + i * 3, linha); // Adiciona 2 blocos de distância
@@ -59,7 +69,12 @@ public class Simulacao {
         }
     }
 
-    // Método para adicionar mesas Econômicas na linha abaixo
+    /**
+     * Adiciona mesas econômicas ao restaurante.
+     * @param id Identificador das mesas
+     * @param linhaInicial Linha inicial das mesas
+     * @param colunaInicial Coluna inicial das mesas
+     */
     private void adicionarMesasEconomicas(int id, int linhaInicial, int colunaInicial) {
         for (int i = 0; i <= 4; i++) {
             int linha = linhaInicial + i / 5; // 5 mesas por linha
@@ -71,14 +86,11 @@ public class Simulacao {
         }
     }
 
-    public void adicionarParedes(Restaurante restaurante, int coluna) {
-        for (int i = 0; i < 10; i++) {
-            if (i != 0) {
-                // mapa.adicionarParede(restaurante, i, coluna);
-            }
-        }
-    }
-
+    /**
+     * Verifica a disponibilidade de mesas de um determinado tipo.
+     * @param tipoMesa Tipo de mesa a ser verificado
+     * @return A mesa disponível, ou null caso nenhuma mesa esteja disponível
+     */
     public Mesa verificarMesas(String tipoMesa) {
         ArrayList<Mesa> mesas = restaurante.getMesas(); 
 
@@ -92,6 +104,11 @@ public class Simulacao {
         return null; 
     }
 
+    /**
+     * Realiza uma reserva para um cliente em espera.
+     * @param clienteEspera Cliente que está na fila de espera
+     * @param mesaDesejada Mesa desejada para a reserva
+     */
     public void fazerReserva(ClienteEspera clienteEspera, Mesa mesaDesejada) {
         Random rand = new Random();
         int tempoReserva = rand.nextInt(50, 100);
@@ -113,10 +130,9 @@ public class Simulacao {
         
     }
 
-    public void atualizarFila() {
-        //clientesAtendidos++;
-    }
-
+    /**
+     * Gera um novo cliente com uma certa probabilidade.
+     */
     public void gerarCliente() {
         Random rand = new Random();
         int probabilidade = rand.nextInt(100);
@@ -126,6 +142,10 @@ public class Simulacao {
         }
     }
 
+   /**
+     * Atualiza a posição na fila de espera para um determinado tipo de mesa.
+     * @param tipo Tipo de mesa para qual a fila será atualizada
+     */
     private void atualizarPosicaoFila(TipoMesa tipo) {
         switch (tipo) {
             case VIP:
@@ -152,7 +172,10 @@ public class Simulacao {
         }
     }
 
-
+    /**
+     * Processa a criação e inicialização de um novo cliente.
+     * @param tipoMesa Indice do tipo de mesa desejado pelo cliente
+     */
     private void processarNovoCliente(int tipoMesa) {
         TipoMesa[] tipos = TipoMesa.values();
         TipoMesa tipoSelecionado = tipos[tipoMesa];
@@ -165,6 +188,11 @@ public class Simulacao {
         processarReserva(clienteEspera);
     }
 
+    /**
+     * Cria uma nova localização para um cliente baseado no tipo de mesa.
+     * @param tipo Tipo de mesa para determinar a localização
+     * @return Nova localização calculada para o cliente
+     */
     private Localizacao criarLocalizacao(TipoMesa tipo) {
         int coluna = colunaFila + tipo.deslocamentoColuna;
         int linha = switch (tipo) {
@@ -175,6 +203,10 @@ public class Simulacao {
         return new Localizacao(coluna, linha);
     }
 
+    /**
+     * Processa a tentativa de reserva para um cliente em espera.
+     * @param clienteEspera Cliente que tentará fazer a reserva
+     */
     private void processarReserva(ClienteEspera clienteEspera) {
         Mesa mesaDisponivel = verificarMesas(clienteEspera.getTipoMesa());
         
@@ -200,21 +232,13 @@ public class Simulacao {
         }
     }
 
-    // public void enviarProximoClienteParaMesa(int numeroMesa) {
-    // if (!restaurante.getFilaEspera().isEmpty() && numeroMesa >= 0 && numeroMesa <
-    // 3) {
-    // if (veiculoAtual == null
-    // ||
-    // veiculoAtual.getLocalizacaoAtual().equals(veiculoAtual.getLocalizacaoDestino()))
-    // {
-    // veiculoAtual = restaurante.retirarDaFila.poll();
-    // veiculoAtual.setLocalizacaoDestino(mesas[numeroMesa].getLocalizacaoAtual());
-    // }
-    // }
-    // }
-
+    /**
+     * Executa a simulação por um número determinado de passos.
+     * @param numPassos Número de passos da simulação a serem executados
+     */
     public void executarSimulacao(int numPassos) {
         janelaSimulacao.executarAcao();
+        System.out.println("Bem vindos ao " + restaurante.getRestauranteNome());
         // Integer coluna = 0;
         for (int i = 0; i < numPassos; i++) {
             executarUmPasso();
@@ -225,6 +249,9 @@ public class Simulacao {
         System.out.println("Valor total do caixa do restaurante: " + restaurante.getCaixaTotal());
     }
 
+    /**
+     * Executa um único passo da simulação, processando todos os clientes e mesas.
+     */
     private void executarUmPasso() {
         janelaSimulacao.executarAcao();
 
@@ -248,10 +275,13 @@ public class Simulacao {
                 clienteAtendido.executarAcao();
             }
         }
-
         simularPasso();
     }
 
+    /**
+     * Processa todos os clientes na fila de espera, verificando disponibilidade de mesas.
+     * @param fila Lista de clientes em espera a ser processada
+     */
     private void processarFilaEspera(ArrayList<ClienteEspera> fila) {
         if (!fila.isEmpty()) {
             Iterator<ClienteEspera> it = fila.iterator();
@@ -268,12 +298,20 @@ public class Simulacao {
         }
     }
 
+    /**
+     * Define o destino de um cliente em relação à mesa reservada.
+     * @param cliente Cliente que terá seu destino definido
+     * @param mesa Mesa associada ao cliente
+     */
     private void definirDestinoCliente(Cliente cliente, Mesa mesa) {
         Localizacao localizacaoMesa = mesa.getLocalizacaoMesa();
         Localizacao destino = new Localizacao(localizacaoMesa.getX() + 1, localizacaoMesa.getY());
         cliente.setLocalizacaoDestino(destino);
     }
 
+    /**
+     * Simula um passo do restaurante, processando todas as reservas ativas.
+     */
     public void simularPasso() {
         ArrayList<Cliente> clientes = restaurante.getFilaAtendidos();
         for (Cliente cliente : clientes) {
@@ -283,6 +321,10 @@ public class Simulacao {
         }
     }
 
+    /**
+     * Processa uma reserva específica, atualizando seu tempo ou finalizando-a.
+     * @param cliente Cliente cuja reserva será processada
+     */
     private void processarReserva(Cliente cliente) {
         Reserva reserva = cliente.getReserva();
         if (reserva.getTempoReserva() > 0) {
@@ -292,6 +334,11 @@ public class Simulacao {
         }
     }
 
+    /**
+     * Finaliza uma reserva, liberando a mesa e atualizando o estado do cliente.
+     * @param cliente Cliente cuja reserva será finalizada
+     * @param reserva Reserva a ser finalizada
+     */
     private void finalizarReserva(Cliente cliente, Reserva reserva) {
         System.out.println("Reserva finalizada! : " + cliente.getId());
         cliente.setReserva(null);
@@ -299,6 +346,10 @@ public class Simulacao {
         cliente.setLocalizacaoDestino(new Localizacao(20, 20));
     }
 
+    /**
+     * Pausa a execução por um determinado período.
+     * @param milisegundos Tempo em milissegundos para pausar a execução
+     */
     private void esperar(int milisegundos) {
         try {
             Thread.sleep(milisegundos);

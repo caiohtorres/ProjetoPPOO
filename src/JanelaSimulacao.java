@@ -37,10 +37,6 @@ public class JanelaSimulacao extends JFrame {
                     Localizacao localizacao = cliente.getLocalizacaoAtual();
                     visaoMapa.desenharImagem(localizacao.getX(), localizacao.getY(), cliente.getImagem());
                 }
-                if (mapa.getRestaurante(i, j) != null) {
-                    Restaurante restaurante = mapa.getRestaurante(i, j);
-                    visaoMapa.desenharImagem(i, j, restaurante.getImagem());
-                }
             }
         }
         visaoMapa.repaint();

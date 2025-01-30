@@ -12,6 +12,7 @@ public class Mapa {
     private int altura;
     private Restaurante[][] restaurantes;
 
+
     private static final int LARGURA_PADRAO = 20;
     private static final int ALTURA_PADRAO = 20;
 
@@ -35,6 +36,7 @@ public class Mapa {
     public Mapa() {
         this(LARGURA_PADRAO, ALTURA_PADRAO);
     }
+    
 
     public void adicionarItem(Mesa v) {
         itens[v.getLocalizacaoMesa().getX()][v.getLocalizacaoMesa().getY()] = v;
@@ -76,6 +78,8 @@ public class Mapa {
     public Restaurante getRestaurante(int x, int y) {
         return restaurantes[x][y];
     }
+
+
 
 
 
